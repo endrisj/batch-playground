@@ -1,3 +1,6 @@
-{ "url": "wiki", "famousPeople": ["Jonas Basas", "Antanas"]}
-{ "url": "delfi", "famousPeople": ["Petras"]}
-{ "url": "15min", "famousPeople": ["Kazys", "Maryte", "Ceslovas"]}
+{"firstCall":"wiki","secondCall":{"url":"wiki","famousPeople":["Jonas Basas", "Antanas"]},"thirdCall":{"url":"wiki","repositoryKey":"wi"}}
+{"firstCall":"delfi","secondCall":{"url":"delfi","famousPeople":["Petras"]},"thirdCall":{"url":"delfi","repositoryKey":"di"}}
+{"firstCall":"http://github","secondCall":{"url":"wrong","famousPeople":["Paulius"]},"thirdCall":{"url":"http://github","repositoryKey":"git"}}
+{"firstCall":"http://google.com","secondCall":{"url":"w","famousPeople":[]},"thirdCall":{"url":"w","repositoryKey":"w"}}
+{"firstCall":"15min","secondCall":{"url":"15min","famousPeople":["Kazys", "Maryte", "Ceslovas"]},"thirdCall":{"url":"15min","repositoryKey":"15"}}
+{"firstCall":"delfi","secondCall":{"url":"delfi","famousPeople":["Petras2"]},"thirdCall":{"url":"delfi","repositoryKey":"di"}}

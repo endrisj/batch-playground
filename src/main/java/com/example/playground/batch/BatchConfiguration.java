@@ -1,5 +1,6 @@
 package com.example.playground.batch;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.springframework.batch.core.Job;
@@ -32,9 +33,9 @@ public class BatchConfiguration {
     private StepBuilderFactory steps;
 
     @Bean
-    public Step step1(ItemReader<String> reader, ItemProcessor<String, CrawlingResultDto> processor, ItemWriter<CrawlingResultDto> writer) {
+    public Step step1(ItemReader<String> reader, ItemProcessor<String, CrawlingDto> processor, ItemWriter<CrawlingDto> writer) {
         return steps.get("step1")
-            .<String, CrawlingResultDto>chunk(1)
+            .<String, CrawlingDto>chunk(1)
             .reader(reader)
             .processor(processor)
             .writer(writer)
@@ -59,20 +60,22 @@ public class BatchConfiguration {
 
     @Bean
     public ItemProcessor processor() {
-        return (ItemProcessor<String, CrawlingResultDto>) (String i) -> {
+        return (ItemProcessor<String, CrawlingDto>) (String i) -> {
             ObjectMapper mapper = new ObjectMapper();
-            return mapper.readValue(i, CrawlingResultDto.class);
+            return mapper.readValue(i, CrawlingDto.class);
         };
     }
 
     @Bean
-    public ItemWriter<CrawlingResultDto> writer() {
-        return new ItemWriter<CrawlingResultDto>() {
+    public ItemWriter<CrawlingDto> writer() {
+        return new ItemWriter<CrawlingDto>() {
             @Override
-            public void write(List<? extends CrawlingResultDto> list) throws Exception {
+            public void write(List<? extends CrawlingDto> list) throws Exception {
                 try {
                     RestTemplate restTemplate = new RestTemplate();
-                    restTemplate.postForLocation("http://localhost:8080/famous-people-for-url", list.get(0));
+                    restTemplate.postForLocation("http://localhost:8080/url-to-be-scanned", list.get(0).getFirstCall());
+                    restTemplate.postForLocation("http://localhost:8080/famous-people-for-url", list.get(0).getSecondCall());
+                    restTemplate.postForLocation("http://localhost:8080/repository-key-for-url", list.get(0).getThirdCall());
                 } catch (HttpClientErrorException e) {
                     System.out.println("WHEN SENDING `"+list.get(0)+"` got error: "+e.getMessage());
                 }
