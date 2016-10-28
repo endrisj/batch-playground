@@ -9,6 +9,7 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +26,9 @@ public class BatchConfiguration {
 
     @Autowired
     private JobBuilderFactory jobs;
+    
+    @Value("${rest.service.ip}")
+    private String restServiceIp;
 
     @Bean
     public Job job(Step step1, Step step2, Step step3, Step step4, Step step5) throws Exception {
@@ -53,9 +57,9 @@ public class BatchConfiguration {
             public void write(List<? extends CrawlingDto> list) throws Exception {
                 try {
                     RestTemplate restTemplate = new RestTemplate();
-                    restTemplate.postForLocation("http://localhost:8080/url-to-be-scanned", list.get(0).getFirstCall());
-                    restTemplate.postForLocation("http://localhost:8080/famous-people-for-url", list.get(0).getSecondCall());
-                    restTemplate.postForLocation("http://localhost:8080/repository-key-for-url", list.get(0).getThirdCall());
+                    restTemplate.postForLocation("http://"+restServiceIp+":8080/url-to-be-scanned", list.get(0).getFirstCall());
+                    restTemplate.postForLocation("http://"+restServiceIp+":8080/famous-people-for-url", list.get(0).getSecondCall());
+                    restTemplate.postForLocation("http://"+restServiceIp+":8080/repository-key-for-url", list.get(0).getThirdCall());
                 } catch (HttpClientErrorException e) {
                     System.out.println("WHEN SENDING `"+list.get(0)+"` got error: "+e.getMessage());
                 }
